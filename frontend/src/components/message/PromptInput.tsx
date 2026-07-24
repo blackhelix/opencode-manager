@@ -8,6 +8,7 @@ import { useOpenCodeClient } from '@/hooks/useOpenCode'
 import { useVariants } from '@/hooks/useVariants'
 import { useSessionAgent } from '@/hooks/useSessionAgent'
 import { useSTT } from '@/hooks/useSTT'
+import { usePushToTalk } from '@/hooks/usePushToTalk'
 
 import { useUserBash } from '@/stores/userBashStore'
 import { useModelStore } from '@/stores/modelStore'
@@ -135,6 +136,7 @@ export const PromptInput = memo(forwardRef<PromptInputHandle, PromptInputProps>(
     transcript,
     clear: clearSTT,
   } = useSTT()
+  usePushToTalk({ startRecording, stopRecording, isRecording, transcript })
 
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -1259,6 +1261,7 @@ return (
 
       <textarea
         ref={textareaRef}
+        data-prompt-textarea
         value={prompt}
         onChange={handleInput}
         onKeyDown={handleKeyDown}

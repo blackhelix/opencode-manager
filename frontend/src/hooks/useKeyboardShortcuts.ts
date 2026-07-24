@@ -54,14 +54,20 @@ interface ShortcutActions {
   compact?: () => void
   fork?: () => void
   openSettings?: () => void
+  focusPrompt?: () => void
+  ttsPlay?: () => void
+  ttsPause?: () => void
+  ttsInterrupt?: () => void
 }
 
 export function useKeyboardShortcuts(actions: ShortcutActions = {}) {
   const { preferences } = useSettings()
   const [leaderActive, setLeaderActive] = useState(false)
   const leaderTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const leaderActiveRef = useRef(false)
   const preferencesRef = useRef(preferences)
   preferencesRef.current = preferences
+  leaderActiveRef.current = leaderActive
 
   const actionsRef = useRef(actions)
   actionsRef.current = actions
@@ -70,6 +76,7 @@ export function useKeyboardShortcuts(actions: ShortcutActions = {}) {
     if (leaderTimeoutRef.current) {
       clearTimeout(leaderTimeoutRef.current)
       leaderTimeoutRef.current = null
+      leaderActiveRef.current = false
     }
   }, [])
 
@@ -117,6 +124,18 @@ export function useKeyboardShortcuts(actions: ShortcutActions = {}) {
       case 'settings':
         currentActions.openSettings?.()
         break
+      case 'focusPrompt':
+        currentActions.focusPrompt?.()
+        break
+      case 'ttsPlay':
+        currentActions.ttsPlay?.()
+        break
+      case 'ttsPause':
+        currentActions.ttsPause?.()
+        break
+      case 'ttsInterrupt':
+        currentActions.ttsInterrupt?.()
+        break
     }
   }, [])
 
@@ -140,9 +159,10 @@ export function useKeyboardShortcuts(actions: ShortcutActions = {}) {
     
     if (isFileEditor) return
 
-    if (leaderActive) {
+    if (leaderActiveRef.current) {
       clearLeaderTimeout()
       setLeaderActive(false)
+      leaderActiveRef.current = false
       
       const action = Object.entries(shortcuts).find(([actionName, keys]) => {
         if (directShortcuts.includes(actionName)) return false
@@ -159,9 +179,11 @@ export function useKeyboardShortcuts(actions: ShortcutActions = {}) {
     if (shortcut === leaderKey && !isInInput) {
       e.preventDefault()
       setLeaderActive(true)
+      leaderActiveRef.current = true
       clearLeaderTimeout()
       leaderTimeoutRef.current = setTimeout(() => {
         setLeaderActive(false)
+        leaderActiveRef.current = false
       }, LEADER_TIMEOUT)
       return
     }

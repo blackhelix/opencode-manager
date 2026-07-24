@@ -344,8 +344,9 @@ class OpenCodeServerManager {
     delete cleanEnv.OPENCODE_PID
     delete cleanEnv.OPENCODE
 
+    const opencodeBin = process.platform === 'win32' ? 'opencode.cmd' : 'opencode'
     this.serverProcess = spawn(
-      'opencode',
+      opencodeBin,
       ['serve', '--port', openCodeServerPort.toString(), '--hostname', openCodeServerHost],
       {
         cwd: openCodeServerDirectory,

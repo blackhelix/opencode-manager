@@ -200,11 +200,33 @@ export function KeyboardShortcuts() {
           )}
         </div>
 
-        {Object.entries(shortcuts).map(([action, keys]) => (
+        {Object.entries(shortcuts).map(([action, keys]) => {
+          const displayName = {
+            focusPrompt: 'Focus Prompt Input',
+            ttsPlay: 'TTS Play / Resume',
+            ttsPause: 'TTS Pause',
+            ttsInterrupt: 'TTS Interrupt & Reset',
+            submit: 'Submit Prompt',
+            abort: 'Abort / Stop',
+            toggleMode: 'Toggle Mode',
+            toggleSidebar: 'Toggle Sidebar',
+            selectModel: 'Select Model',
+            newSession: 'New Session',
+            closeSession: 'Close Session',
+            variantCycle: 'Cycle Variant',
+            settings: 'Open Settings',
+            sessions: 'Open Sessions',
+            compact: 'Compact View',
+            fork: 'Fork Session',
+            undo: 'Undo',
+            redo: 'Redo',
+          }[action] || action.replace(/([A-Z])/g, ' $1').trim()
+          
+          return (
           <div key={action} className="flex items-center justify-between py-3 border-b border-border last:border-0">
             <div className="space-y-1">
-              <p className="text-foreground font-medium capitalize">
-                {action.replace(/([A-Z])/g, ' $1').trim()}
+              <p className="text-foreground font-medium">
+                {displayName}
               </p>
               <button
                 onClick={() => toggleDirectShortcut(action)}
@@ -252,7 +274,8 @@ export function KeyboardShortcuts() {
               </div>
             )}
           </div>
-        ))}
+          )
+        })}
       </div>
 
       <p className="mt-6 text-sm text-muted-foreground">

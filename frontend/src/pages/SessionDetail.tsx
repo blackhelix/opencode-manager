@@ -28,6 +28,7 @@ import { useAutoScroll } from "@/hooks/useAutoScroll";
 import { useMobile } from "@/hooks/useMobile";
 import { useVisualViewport } from "@/hooks/useVisualViewport";
 import { useTTS } from "@/hooks/useTTS";
+import { useTTSControl } from '@/hooks/useTTSControl'
 import { getAssistantText, getLatestPlayableAssistantMessage, useAutoPlayLastResponse } from "@/hooks/useAutoPlayLastResponse";
 import { useEffect, useRef, useCallback, useMemo } from "react";
 import { MessageSkeleton } from "@/components/message/MessageSkeleton";
@@ -205,6 +206,10 @@ export function SessionDetail() {
     isStreamingResponse,
   });
 
+  const { handlePlay, handlePause, handleInterrupt } = useTTSControl({
+    messages: messages ?? [],
+  });
+
   const handleShowSessionsDialog = useCallback(() => setSessionsDialogOpen(true), []);
   const handleShowHelpDialog = useCallback(() => openSettings(), [openSettings]);
 
@@ -348,6 +353,13 @@ export function SessionDetail() {
         abortSession.mutate(sessionId);
       }
     },
+    focusPrompt: () => {
+      const textarea = document.querySelector<HTMLTextAreaElement>('[data-prompt-textarea]')
+      textarea?.focus()
+    },
+    ttsPlay: handlePlay,
+    ttsPause: handlePause,
+    ttsInterrupt: handleInterrupt,
   });
 
   

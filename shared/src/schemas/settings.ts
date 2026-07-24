@@ -1,6 +1,30 @@
 import { z } from "zod";
 import { NotificationPreferencesSchema, DEFAULT_NOTIFICATION_PREFERENCES } from "./notifications";
 
+export const PushToTalkConfigSchema = z.object({
+  enabled: z.boolean().default(false),
+  key: z.string().default('RightCtrl'),
+  soundOnStart: z.boolean().default(true),
+  soundOnStop: z.boolean().default(true),
+  soundOnInsert: z.boolean().default(true),
+});
+
+export type PushToTalkConfig = {
+  enabled: boolean;
+  key: string;
+  soundOnStart: boolean;
+  soundOnStop: boolean;
+  soundOnInsert: boolean;
+};
+
+export const DEFAULT_PUSH_TO_TALK_CONFIG: PushToTalkConfig = {
+  enabled: false,
+  key: 'RightCtrl',
+  soundOnStart: true,
+  soundOnStop: true,
+  soundOnInsert: true,
+};
+
 export const CustomCommandSchema = z.object({
   name: z.string(),
   description: z.string(),
@@ -80,6 +104,10 @@ export const DEFAULT_KEYBOARD_SHORTCUTS: Record<string, string> = {
   toggleSidebar: 'B',
   selectModel: 'M',
   variantCycle: `${CMD_KEY}+T`,
+  focusPrompt: '`',
+  ttsPlay: 'P',
+  ttsPause: 'U',
+  ttsInterrupt: 'I',
 };
 
 export const GitCredentialSchema = z.object({
@@ -151,6 +179,7 @@ export const UserPreferencesSchema = z.object({
   gitIdentity: GitIdentitySchema.optional(),
   tts: TTSConfigSchema.optional(),
   stt: STTConfigSchema.optional(),
+  pushToTalk: PushToTalkConfigSchema.optional(),
   notifications: NotificationPreferencesSchema.optional(),
   lastKnownGoodConfig: z.string().optional(),
   repoOrder: z.array(z.number()).optional(),
@@ -203,6 +232,7 @@ export const DEFAULT_USER_PREFERENCES = {
   gitIdentity: DEFAULT_GIT_IDENTITY,
   tts: DEFAULT_TTS_CONFIG,
   stt: DEFAULT_STT_CONFIG,
+  pushToTalk: DEFAULT_PUSH_TO_TALK_CONFIG,
   notifications: DEFAULT_NOTIFICATION_PREFERENCES,
   repoSortMode: 'recent' as const,
   serverEnvVars: [] as ServerEnvVar[],

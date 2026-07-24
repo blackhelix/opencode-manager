@@ -10,15 +10,16 @@ import { ServerHealthStatus } from '@/components/settings/ServerHealthStatus'
 import { ProviderSettings } from '@/components/settings/ProviderSettings'
 import { AccountSettings } from '@/components/settings/AccountSettings'
 import { VoiceSettings } from '@/components/settings/VoiceSettings'
+import { AccessibilitySettings } from '@/components/settings/AccessibilitySettings'
 import { NotificationSettings } from '@/components/settings/NotificationSettings'
 import { VersionSelectDialog } from '@/components/settings/VersionSelectDialog'
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Settings2, Keyboard, Code, ChevronLeft, Key, GitBranch, User, Volume2, Bell, X } from 'lucide-react'
+import { Accessibility, Settings2, Keyboard, Code, ChevronLeft, Key, GitBranch, User, Volume2, Bell, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useSettingsDialog } from '@/hooks/useSettingsDialog'
 
-type SettingsView = 'menu' | 'general' | 'git' | 'shortcuts' | 'opencode' | 'providers' | 'account' | 'voice' | 'notifications'
+type SettingsView = 'menu' | 'general' | 'git' | 'shortcuts' | 'opencode' | 'providers' | 'account' | 'voice' | 'notifications' | 'accessibility'
 
 export function SettingsDialog() {
   const { isOpen, close, activeTab, setActiveTab } = useSettingsDialog()
@@ -79,6 +80,7 @@ export function SettingsDialog() {
     { id: 'general', icon: Settings2, label: 'General Settings', description: 'App preferences and behavior' },
     { id: 'notifications', icon: Bell, label: 'Notifications', description: 'Push notification preferences' },
     { id: 'voice', icon: Volume2, label: 'Voice', description: 'Text-to-speech and speech-to-text settings' },
+    { id: 'accessibility', icon: Accessibility, label: 'Accessibility', description: 'Push to talk and screen reader settings' },
     { id: 'git', icon: GitBranch, label: 'Git', description: 'Git identity and credentials for repositories' },
     { id: 'shortcuts', icon: Keyboard, label: 'Keyboard Shortcuts', description: 'Customize keyboard shortcuts' },
     { id: 'opencode', icon: Code, label: 'OpenCode Config', description: 'Manage OpenCode configurations, commands, and agents' },
@@ -126,7 +128,7 @@ export function SettingsDialog() {
            </div>
           <Tabs defaultValue="account" value={activeTab} onValueChange={handleTabChange} className="w-full flex flex-col flex-1 min-h-0">
             <div className="px-6 pt-6 pb-4 flex-shrink-0">
-              <TabsList className="grid w-full grid-cols-8 bg-card p-1">
+              <TabsList className="grid w-full grid-cols-9 bg-card p-1">
                 <TabsTrigger value="account" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-muted-foreground transition-all duration-200">
                   Account
                 </TabsTrigger>
@@ -138,6 +140,9 @@ export function SettingsDialog() {
                 </TabsTrigger>
                 <TabsTrigger value="voice" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-muted-foreground transition-all duration-200">
                   Voice
+                </TabsTrigger>
+                <TabsTrigger value="accessibility" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-muted-foreground transition-all duration-200">
+                  Accessibility
                 </TabsTrigger>
                 <TabsTrigger value="git" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-muted-foreground transition-all duration-200">
                   Git
@@ -160,6 +165,7 @@ export function SettingsDialog() {
                 <TabsContent key="general" value="general" className="mt-0"><GeneralSettings /></TabsContent>
                 <TabsContent key="notifications" value="notifications" className="mt-0"><NotificationSettings /></TabsContent>
                 <TabsContent key="voice" value="voice" className="mt-0"><VoiceSettings /></TabsContent>
+                <TabsContent key="accessibility" value="accessibility" className="mt-0"><AccessibilitySettings /></TabsContent>
                 <TabsContent key="git" value="git" className="mt-0"><GitSettings /></TabsContent>
                 <TabsContent key="shortcuts" value="shortcuts" className="mt-0"><KeyboardShortcuts /></TabsContent>
                 <TabsContent key="opencode" value="opencode" className="mt-0">
@@ -232,8 +238,9 @@ export function SettingsDialog() {
              {mobileView === 'account' && <div key="account"><AccountSettings /></div>}
              {mobileView === 'general' && <div key="general"><GeneralSettings /></div>}
              {mobileView === 'notifications' && <div key="notifications"><NotificationSettings /></div>}
-             {mobileView === 'voice' && <div key="voice"><VoiceSettings /></div>}
-             {mobileView === 'git' && <div key="git"><GitSettings /></div>}
+              {mobileView === 'voice' && <div key="voice"><VoiceSettings /></div>}
+              {mobileView === 'accessibility' && <div key="accessibility"><AccessibilitySettings /></div>}
+              {mobileView === 'git' && <div key="git"><GitSettings /></div>}
               {mobileView === 'shortcuts' && <div key="shortcuts"><KeyboardShortcuts /></div>}
                 {mobileView === 'opencode' && (
                    <div key="opencode" className="space-y-4">
